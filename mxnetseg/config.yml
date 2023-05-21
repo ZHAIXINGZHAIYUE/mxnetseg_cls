@@ -7,8 +7,11 @@
 # 'DenseASPP', 'FaPN', 'FCNResNet', 'FCNMobileNet', 'GFFNet', 'LadderDenseNet', 'PSPNet',
 # 'SeENet', 'SemanticFPN', 'SETR',
 # 'EPRNet', 'CANetv1', 'CANetv2'
-model_name: AlignSeg
-backbone: resnet101
+# ‘EPRNET_CLS' 'EPRNET_CLS_LIGHT'
+# model_name: AlignSeg
+# backbone: resnet101
+model_name: EPRNET_CLS
+backbone: eprnet_cls_light
 aux: False
 aux_weight: ~
 lr_mult: 1
@@ -21,7 +24,8 @@ norm_layer: SyncBN
 # when set to ‘seg’, backbone_ckpt and prior_classes need to be specified
 # resume: checkpoint of the segmentation model
 backbone_init:
-  manner: cls
+  # manner: cls
+  manner: ~
   backbone_ckpt: ~
   prior_classes: ~
 resume: ~

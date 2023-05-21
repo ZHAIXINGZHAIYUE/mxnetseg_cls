@@ -21,6 +21,7 @@ from .seenet import SeENet
 from .semanticfpn import SemanticFPN
 from .setr import SETR
 from .canet import *
+from .eprnet_cls import EPRNET_CLS, EPRNET_CLS_LIGHT
 from mxnetseg.utils import validate_checkpoint, MODELS
 
 
@@ -29,8 +30,16 @@ class ModelFactory:
         self._name = name
         self._class = MODELS[name]
 
-    def get_model(self, model_kwargs, resume=None, lr_mult=1, backbone_init_manner='cls',
-                  backbone_ckpt=None, prior_classes=None, ctx=(cpu())):
+    def get_model(
+        self,
+        model_kwargs,
+        resume=None,
+        lr_mult=1,
+        backbone_init_manner="cls",
+        backbone_ckpt=None,
+        prior_classes=None,
+        ctx=(cpu()),
+    ):
         net = self._class(**model_kwargs)
         if resume:
             checkpoint = validate_checkpoint(self._name, resume)
@@ -39,15 +48,17 @@ class ModelFactory:
         elif backbone_init_manner is None:
             net.initialize()
             print("Random initialized.")
-        elif backbone_init_manner == 'cls':
+        elif backbone_init_manner == "cls":
             net.head.initialize()
-            net.head.collect_params().setattr('lr_mult', lr_mult)
+            net.head.collect_params().setattr("lr_mult", lr_mult)
             if net.aux:
                 net.aux_head.initialize()
-                net.aux_head.collect_params().setattr('lr_mult', lr_mult)
-            print(f"ImageNet pre-trained backbone loaded & head randomly initialized x{lr_mult}.")
-        elif backbone_init_manner == 'seg':
-            model_kwargs['nclass'] = prior_classes
+                net.aux_head.collect_params().setattr("lr_mult", lr_mult)
+            print(
+                f"ImageNet pre-trained backbone loaded & head randomly initialized x{lr_mult}."
+            )
+        elif backbone_init_manner == "seg":
+            model_kwargs["nclass"] = prior_classes
             pretrain = self._class(**model_kwargs)
             checkpoint = validate_checkpoint(self._name, backbone_ckpt)
             pretrain.load_parameters(checkpoint)
