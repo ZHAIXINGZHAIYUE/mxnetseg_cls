@@ -17,11 +17,13 @@ class EPRNetCls(nn.HybridBlock):
         norm_kwargs=None,
         activation="prelu",
         drop=0.0,
+        symbolize=True,
         **kwargs
     ):
         super(EPRNetCls, self).__init__()
         width1, width2, width3, width4 = tuple(stage_channels)
         self.stage_channels = stage_channels
+        self.symbolize = symbolize
         with self.name_scope():
             self.conv = nn.Conv2D(
                 channels=width1, kernel_size=3, strides=2, padding=1, use_bias=False

@@ -113,11 +113,13 @@ def train(cfg, ctx_lst, project_name, log_interval=5, no_val=False, lr=None, wd=
     )
     logger = get_logger(name="pdb", level=10)
     logger.info(str(net))
-    import pdb
+    logger.info(type(net))
+    # import pdb
 
-    pdb.set_trace()
+    # pdb.set_trace()
     if net.symbolize:
         net.hybridize()
+        logger.info("hybridize true!")
 
     # num_worker = 0 if platform.system() == "Windows" else 16
     num_worker = 0
